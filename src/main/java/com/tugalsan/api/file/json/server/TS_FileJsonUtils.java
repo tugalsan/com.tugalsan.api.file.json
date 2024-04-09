@@ -81,7 +81,7 @@ public class TS_FileJsonUtils {
 
     public static TGS_Union<Boolean> toFile(Object o, boolean pretty, Path destFile, boolean withUTF8BOM, boolean windowsCompatable) {
         var u = toJSON(o, pretty);
-        if (u.isError()) {
+        if (u.isExcuse()) {
             return TGS_Union.ofExcuse(u.excuse());
         }
         return TS_FileTxtUtils.toFile(u.value(), destFile, false, StandardCharsets.UTF_8, withUTF8BOM, windowsCompatable);
