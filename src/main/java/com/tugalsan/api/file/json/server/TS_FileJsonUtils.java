@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 import com.tugalsan.api.file.txt.server.*;
 import com.tugalsan.api.union.client.TGS_Union;
+import com.tugalsan.api.union.client.TGS_UnionExcuse;
 import java.io.IOException;
 
 public class TS_FileJsonUtils {
@@ -75,14 +76,14 @@ public class TS_FileJsonUtils {
         }
     }
 
-    public static TGS_Union<Boolean> toFile(CharSequence sourceJSON, Path destFile, boolean withUTF8BOM, boolean windowsCompatable) {
+    public static TGS_UnionExcuse toFile(CharSequence sourceJSON, Path destFile, boolean withUTF8BOM, boolean windowsCompatable) {
         return TS_FileTxtUtils.toFile(sourceJSON, destFile, false, StandardCharsets.UTF_8, withUTF8BOM, windowsCompatable);
     }
 
-    public static TGS_Union<Boolean> toFile(Object o, boolean pretty, Path destFile, boolean withUTF8BOM, boolean windowsCompatable) {
+    public static TGS_UnionExcuse toFile(Object o, boolean pretty, Path destFile, boolean withUTF8BOM, boolean windowsCompatable) {
         var u = toJSON(o, pretty);
         if (u.isExcuse()) {
-            return TGS_Union.ofExcuse(u.excuse());
+            return TGS_UnionExcuse.ofExcuse(u.excuse());
         }
         return TS_FileTxtUtils.toFile(u.value(), destFile, false, StandardCharsets.UTF_8, withUTF8BOM, windowsCompatable);
     }
