@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.*;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.*;
 import com.tugalsan.api.file.txt.server.*;
+import com.tugalsan.api.union.client.TGS_UnionExcuse;
 import com.tugalsan.api.unsafe.client.*;
 
 public class TS_FileJsonUtils {
@@ -46,11 +47,12 @@ public class TS_FileJsonUtils {
     //ATTENTION ALL POJO FIELDS MUST BE PUBLIC. 
     //OR U WILL GET SERIALIZATION EXCEPTION
     //a = objectMapper.readValue(jsonString, Aligel.class);
-    public static <T> T toObject(CharSequence jsonString, Class<T> className_dot_class) {
+    public static <T> TGS_UnionExcuse<T> toObject(CharSequence jsonString, Class<T> className_dot_class) {
         return TGS_UnSafe.call(() -> {
-            return new ObjectMapper().setVisibility(PropertyAccessor.FIELD, Visibility.ANY)
+            var obj = new ObjectMapper().setVisibility(PropertyAccessor.FIELD, Visibility.ANY)
                     .readValue(jsonString.toString(), className_dot_class);
-        });
+            return TGS_UnionExcuse.of(obj);
+        }, e -> TGS_UnionExcuse.ofExcuse(e));
     }
 
     public static String toJSON(Object o, boolean pretty) {
